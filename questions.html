@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>A question for you... 💜</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Serif+Display:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:    #f2a7c3;
+      --rose-d:  #d4678e;
+      --lavender:#c9b4f5;
+      --lav-d:   #8b6bd4;
+      --gold:    #f5d98b;
+      --cream:   #fdf6f0;
+      --ink:     #1a0e2a;
+    }
+
+    html, body { min-height: 100%; width: 100%; overflow-x: hidden; }
+
+    body {
+      background: #0d0618;
+      font-family: 'Jost', sans-serif;
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* BLOBS */
+    .blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.18; pointer-events: none; animation: drift 12s ease-in-out infinite alternate; }
+    .blob-1 { width: 420px; height: 420px; background: #b06cd6; top: -80px; left: -100px; }
+    .blob-2 { width: 340px; height: 340px; background: #e85d9a; bottom: -60px; right: -80px; animation-delay: 3s; }
+    .blob-3 { width: 260px; height: 260px; background: #6bc8e8; top: 40%; left: 60%; animation-delay: 6s; }
+    @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(30px,20px) scale(1.08); } }
+
+    /* STARS */
+    #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d) ease-in-out infinite alternate; }
+    @keyframes twinkle { from { opacity: 0.1; transform: scale(0.8); } to { opacity: 0.9; transform: scale(1.2); } }
+
+    /* PETALS */
+    .petal { position: fixed; width: 10px; height: 14px; border-radius: 60% 40% 60% 40%; opacity: 0; animation: fall linear infinite; pointer-events: none; z-index: 0; }
+    @keyframes fall {
+      0%   { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.7; } 90%  { opacity: 0.5; }
+      100% { transform: translateY(105vh) rotate(400deg); opacity: 0; }
+    }
+
+    /* LAYOUT */
+    main { position: relative; z-index: 10; text-align: center; padding: 2.5rem 1.5rem; max-width: 420px; width: 100%; }
+
+    /* PROGRESS */
+    .progress-wrap { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 2.8rem; animation: fadeUp 0.7s ease both; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.4s, transform 0.3s; }
+    .dot.active { background: var(--rose); transform: scale(1.3); }
+    .dot.done   { background: var(--lavender); }
+
+    /* QUESTION */
+    .q-number { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase; color: var(--lavender); margin-bottom: 1.2rem; animation: fadeUp 0.7s 0.05s ease both; }
+    .q-title  { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 7vw, 2.8rem); line-height: 1.18; font-style: italic; margin-bottom: 0.8rem; animation: fadeUp 0.7s 0.12s ease both; }
+    .q-title .hl { color: var(--rose); }
+    .q-sub    { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-style: italic; color: rgba(255,255,255,0.5); margin-bottom: 3.2rem; animation: fadeUp 0.7s 0.2s ease both; }
+
+    /* ORNAMENT */
+    .ornament { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 2.8rem; animation: fadeUp 0.7s 0.16s ease both; }
+    .ornament::before, .ornament::after { content: ''; flex: 1; height: 0.5px; background: linear-gradient(to right, transparent, rgba(242,167,195,0.4), transparent); }
+    .ornament span { color: var(--rose); font-size: 0.7rem; letter-spacing: 0.2em; }
+
+    /* BTN ZONE — only yes button here now */
+    .btn-zone { width: 100%; min-height: 70px; display: flex; align-items: center; justify-content: center; animation: fadeUp 0.7s 0.28s ease both; }
+
+    /* YES BUTTON */
+    .yes-btn {
+      position: relative;
+      z-index: 10; /* lower than no-btn */
+      background: linear-gradient(135deg, var(--rose) 0%, var(--lavender) 100%);
+      color: var(--ink); border: none;
+      font-family: 'DM Serif Display', serif; font-size: 1.15rem; font-style: italic;
+      padding: 0.85rem 2.8rem; border-radius: 50px; cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 0 30px rgba(242,167,195,0.35), 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .yes-btn::after { content: ''; position: absolute; inset: -2px; border-radius: 52px; background: linear-gradient(135deg, var(--rose), var(--lavender)); z-index: -1; opacity: 0; transition: opacity 0.3s; filter: blur(8px); }
+    .yes-btn:hover { transform: scale(1.07); box-shadow: 0 0 50px rgba(242,167,195,0.55), 0 6px 28px rgba(0,0,0,0.4); }
+    .yes-btn:hover::after { opacity: 0.6; }
+    .yes-btn:active { transform: scale(0.97); }
+
+    /* NO BUTTON — fixed to body, ALWAYS on top of everything */
+    #no-btn {
+      position: fixed;
+      z-index: 99999; /* always above everything */
+      background: linear-gradient(135deg, rgba(160, 80, 210, 0.55) 0%, rgba(220, 80, 140, 0.45) 100%);
+      color: #f5e0ff;
+      border: 1.5px solid rgba(220, 160, 255, 0.75);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      font-weight: 600;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      white-space: nowrap;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 24px rgba(180, 80, 230, 0.5), 0 4px 18px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+      /* smooth movement */
+      transition: top 0.38s cubic-bezier(.34,1.56,.64,1), left 0.38s cubic-bezier(.34,1.56,.64,1), opacity 0.3s, box-shadow 0.3s;
+      /* JS will position it beside Yes button on load */
+      top: 50vh;
+      left: 60vw;
+    }
+    #no-btn:hover {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(160, 80, 210, 0.75) 0%, rgba(220, 80, 140, 0.65) 100%);
+      border-color: rgba(240, 190, 255, 0.95);
+      box-shadow: 0 0 38px rgba(180, 80, 230, 0.7), 0 4px 22px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    /* RESULT */
+    .result-card { display: none; flex-direction: column; align-items: center; gap: 0.7rem; animation: popIn 0.6s cubic-bezier(.34,1.56,.64,1) both; }
+    @keyframes popIn { from { opacity: 0; transform: scale(0.4) rotate(-6deg); } to { opacity: 1; transform: scale(1) rotate(0deg); } }
+
+    .result-ring { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, rgba(242,167,195,0.2), rgba(201,180,245,0.2)); border: 1px solid rgba(242,167,195,0.3); display: flex; align-items: center; justify-content: center; font-size: 2.6rem; margin-bottom: 0.5rem; position: relative; }
+    .result-ring::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 0.5px solid rgba(242,167,195,0.2); }
+    .result-title { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 2rem; color: var(--rose); line-height: 1.1; }
+    .result-sub   { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: rgba(255,255,255,0.5); font-style: italic; }
+
+    .next-btn { margin-top: 1.6rem; background: transparent; border: 0.5px solid rgba(242,167,195,0.5); color: var(--rose); font-family: 'Jost', sans-serif; font-size: 0.88rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.75rem 2.2rem; border-radius: 50px; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+    .next-btn:hover { background: rgba(242,167,195,0.1); transform: scale(1.04); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* CONFETTI */
+    .confetti-piece { position: fixed; width: 8px; height: 8px; border-radius: 2px; pointer-events: none; z-index: 9998; animation: confettiFall 1.4s ease-out forwards; }
+    @keyframes confettiFall { 0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); } 100% { opacity: 0; transform: translateY(300px) rotate(720deg) scale(0.3); } }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div id="stars"></div>
+  <div id="petals"></div>
+
+  <main>
+    <div class="progress-wrap" id="progress"></div>
+
+    <div id="q-area">
+      <p class="q-number" id="qnum">Question 1 of 3</p>
+      <h1 class="q-title"  id="qtxt"></h1>
+      <div class="ornament"><span>✦</span></div>
+      <p class="q-sub"     id="qsub"></p>
+      <div class="btn-zone" id="btn-zone">
+        <button class="yes-btn" onclick="answerYes()">Yes 💜</button>
+      </div>
+    </div>
+
+    <div class="result-card" id="result">
+      <div class="result-ring" id="r-emoji">💜</div>
+      <div class="result-title" id="r-text">I knew it!</div>
+      <div class="result-sub"   id="r-sub">The correct answer 🥰</div>
+      <button class="next-btn"  id="next-btn" onclick="nextQuestion()">Next →</button>
+    </div>
+  </main>
+
+  <!-- No button is a direct child of body so fixed pos always works perfectly -->
+  <button id="no-btn" onmouseenter="runAway()" ontouchstart="runAway()">No 🙅</button>
+
+  <script>
+    const questions = [
+      { q: 'Do you <span class="hl">love me?</span>',                   sub: 'think carefully before answering 👀', emoji: '💜', winText: 'I knew it!',      winSub: 'The correct answer 🥰' },
+      { q: 'Am I the <span class="hl">most amazing</span> girlfriend?', sub: 'there is only one right answer 😇',   emoji: '🌸', winText: 'Obviously yes!', winSub: 'Smart boy 😘' },
+      { q: 'Best day of <span class="hl">your life?</span>',            sub: "(hint: it's today 🎂)",               emoji: '✨', winText: 'Correct!!!',     winSub: 'Happy birthday my love 🎂', isLast: true },
+    ];
+
+    let qi = 0, noCount = 0;
+
+    // ── Stars
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('div'); s.className = 'star';
+      const sz = Math.random()*2.2+0.5;
+      s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s`;
+      starsEl.appendChild(s);
+    }
+
+    // ── Petals
+    const pColors = ['#f2a7c3','#c9b4f5','#f5d98b','#f7c0d8','#e4b4f7'];
+    const petalsEl = document.getElementById('petals');
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div'); p.className = 'petal';
+      p.style.cssText = `left:${Math.random()*100}%;background:${pColors[i%5]};animation-duration:${(Math.random()*8+7).toFixed(1)}s;animation-delay:${(Math.random()*10).toFixed(1)}s`;
+      petalsEl.appendChild(p);
+    }
+
+    // ── Progress
+    function renderProgress() {
+      const wrap = document.getElementById('progress');
+      wrap.innerHTML = '';
+      questions.forEach((_,i) => {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i < qi ? ' done' : i === qi ? ' active' : '');
+        wrap.appendChild(d);
+      });
+    }
+
+    // ── Load question
+    function loadQuestion(index, animate) {
+      const q = questions[index];
+      document.getElementById('qnum').textContent = `Question ${index+1} of ${questions.length}`;
+      document.getElementById('qtxt').innerHTML   = q.q;
+      document.getElementById('qsub').textContent = q.sub;
+      if (animate) {
+        ['qnum','qtxt','qsub','btn-zone'].forEach((id,i) => {
+          const el = document.getElementById(id);
+          el.style.animation = 'none'; el.offsetHeight;
+          el.style.animation = `fadeUp 0.55s ${i*0.08}s ease both`;
+        });
+      }
+      resetNoBtn();
+      renderProgress();
+    }
+
+    // ── Reset No button to sit right beside the Yes button
+    function resetNoBtn() {
+      noCount = 0;
+      const btn    = document.getElementById('no-btn');
+      const yesBtn = document.querySelector('.yes-btn');
+      btn.style.transition = 'none';
+      btn.style.opacity    = '1';
+      btn.style.height     = '';  // clear any forced height
+
+      // Place off-screen first to measure cleanly
+      btn.style.top  = '-9999px';
+      btn.style.left = '-9999px';
+
+      requestAnimationFrame(() => {
+        const yRect = yesBtn.getBoundingClientRect();
+        const noW   = btn.offsetWidth;
+        const noH   = btn.offsetHeight;
+
+        // For position:fixed, top = viewport top of Yes button
+        // getBoundingClientRect already gives viewport coords — no scroll needed
+        const top  = yRect.top + (yRect.height - noH) / 2 - 25;
+
+        let left = yRect.right + 14;
+        if (left + noW > window.innerWidth - 10) {
+          left = yRect.left - noW - 14;
+        }
+
+        btn.style.top  = top  + 'px';
+        btn.style.left = left + 'px';
+
+        requestAnimationFrame(() => {
+          btn.style.transition = 'top 0.38s cubic-bezier(.34,1.56,.64,1), left 0.38s cubic-bezier(.34,1.56,.64,1), opacity 0.3s';
+        });
+      });
+    }
+
+    // ── No button runs away to ANYWHERE on the full screen
+    function runAway() {
+      noCount++;
+      const btn = document.getElementById('no-btn');
+      const bw  = btn.offsetWidth  || 110;
+      const bh  = btn.offsetHeight || 46;
+      const pad = 20;
+
+      // Truly random — any corner, any edge, any middle spot
+      const nx = pad + Math.random() * (window.innerWidth  - bw - pad * 2);
+      const ny = pad + Math.random() * (window.innerHeight - bh - pad * 2);
+
+      btn.style.left = nx + 'px';
+      btn.style.top  = ny + 'px';
+
+      // Always visible — opacity floor at 0.6
+      btn.style.opacity = String(Math.max(0.6, 1 - noCount * 0.05));
+    }
+
+    // ── Yes
+    function answerYes() {
+      burst();
+      const q = questions[qi];
+      document.getElementById('q-area').style.display  = 'none';
+      document.getElementById('no-btn').style.display  = 'none';
+      const result = document.getElementById('result');
+      result.style.display = 'flex';
+      document.getElementById('r-emoji').textContent = q.emoji;
+      document.getElementById('r-text').textContent  = q.winText;
+      document.getElementById('r-sub').textContent   = q.winSub;
+      const nb = document.getElementById('next-btn');
+      if (q.isLast) { nb.textContent = 'See your letter 💌'; nb.onclick = () => window.location.href = 'letter.html'; }
+      else          { nb.textContent = 'Next →';             nb.onclick = nextQuestion; }
+    }
+
+    // ── Next question
+    function nextQuestion() {
+      qi++;
+      if (qi >= questions.length) { window.location.href = 'letter.html'; return; }
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('q-area').style.display = 'block';
+      document.getElementById('no-btn').style.display = '';
+      loadQuestion(qi, true);
+    }
+
+    // ── Confetti
+    function burst() {
+      const cols = ['#f2a7c3','#c9b4f5','#f5d98b','#5de8c8','#f7a8d8'];
+      for (let i = 0; i < 32; i++) {
+        const c = document.createElement('div'); c.className = 'confetti-piece';
+        c.style.cssText = `left:${35+Math.random()*30}%;top:${25+Math.random()*25}%;background:${cols[i%5]};transform:translate(${(Math.random()-.5)*260}px,${(Math.random()-.5)*260}px);animation-delay:${Math.random()*0.3}s;border-radius:${Math.random()>.5?'50%':'3px'}`;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 2000);
+      }
+    }
+
+    // Init
+    loadQuestion(0, false);
+    // Position No beside Yes after render
+    setTimeout(resetNoBtn, 150);
+  </script>
+</body>
+</html>

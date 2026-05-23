@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Something special is coming... 🎂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+
+    /* ── Aurora background ── */
+    .aurora {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .aurora-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.18;
+      animation: drift var(--d, 12s) ease-in-out infinite alternate;
+    }
+    .aurora-blob:nth-child(1) { width:500px; height:300px; background:#9b7fb6; top:-80px; left:-100px; --d:14s; }
+    .aurora-blob:nth-child(2) { width:400px; height:250px; background:#e8b4e3; top:40%; right:-80px; --d:11s; animation-delay:2s; }
+    .aurora-blob:nth-child(3) { width:350px; height:200px; background:#6a4c93; bottom:-60px; left:30%; --d:16s; animation-delay:4s; }
+    .aurora-blob:nth-child(4) { width:280px; height:180px; background:#c9a0dc; top:20%; left:40%; --d:9s; animation-delay:1s; }
+    @keyframes drift {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(40px, 30px) scale(1.1); }
+      100% { transform: translate(-30px, 50px) scale(0.95); }
+    }
+
+    /* ── Moon ── */
+    .moon {
+      position: fixed;
+      top: 28px;
+      right: 36px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .moon-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #f5e6c8, #e8c97a);
+      box-shadow: 0 0 24px 8px rgba(232,201,122,0.25), 0 0 60px 20px rgba(232,201,122,0.1);
+      animation: moonPulse 4s ease-in-out infinite;
+    }
+    /* crater details */
+    .moon-circle::before {
+      content: '';
+      position: absolute;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.08);
+      top: 16px; left: 18px;
+    }
+    .moon-circle::after {
+      content: '';
+      position: absolute;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.06);
+      top: 30px; left: 36px;
+    }
+    @keyframes moonPulse {
+      0%,100% { box-shadow: 0 0 24px 8px rgba(232,201,122,0.25), 0 0 60px 20px rgba(232,201,122,0.1); }
+      50%      { box-shadow: 0 0 36px 14px rgba(232,201,122,0.38), 0 0 90px 30px rgba(232,201,122,0.18); }
+    }
+
+    /* ── Shooting stars ── */
+    .shooting-stars { position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+    .shooting-star {
+      position: absolute;
+      height: 1.5px;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, #fff 50%, rgba(255,255,255,0) 100%);
+      border-radius: 2px;
+      opacity: 0;
+      animation: shoot var(--dur, 2.5s) ease-in var(--delay, 0s) infinite;
+      transform-origin: left center;
+    }
+    @keyframes shoot {
+      0%   { opacity: 0; transform: translateX(0) rotate(var(--angle,-20deg)); }
+      5%   { opacity: 1; }
+      60%  { opacity: 0.6; }
+      100% { opacity: 0; transform: translateX(var(--dist, 260px)) rotate(var(--angle,-20deg)); }
+    }
+
+    /* ── Countdown ── */
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 1.8rem;
+      animation: fadeUp 1s 0.4s ease both;
+    }
+    .unit {
+      background: rgba(255,255,255,0.05);
+      border: 0.5px solid rgba(200,160,220,0.25);
+      border-radius: 14px;
+      padding: 1.2rem 0.8rem;
+      text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #e8b4e3;
+      line-height: 1;
+    }
+    .lbl {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: #9b7fb6;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+    .lock-msg {
+      font-size: 1rem;
+      color: #948a9d;
+      letter-spacing: 0.1em;
+      font-style: italic;
+      font-weight: 600;
+      animation: fadeUp 1s 0.7s ease both;
+      cursor: default;
+      transition: color 0.3s;
+    }
+    .lock-msg:hover { color: #e8b4e3; }
+
+    /* ── Sparkle name at bottom ── */
+    .sparkle-name {
+      position: fixed;
+      bottom: 22px;
+      left: 0; right: 0;
+      text-align: center;
+      z-index: 3;
+      pointer-events: none;
+      animation: fadeUp 1.2s 1s ease both;
+    }
+    .sparkle-name span {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.82rem;
+      font-style: italic;
+      color: #7a5f8a;
+      letter-spacing: 0.12em;
+    }
+    .sparkle-name em {
+      color: #c9a0dc;
+      font-style: normal;
+      position: relative;
+    }
+    .sparkle-name em::before,
+    .sparkle-name em::after {
+      content: '✦';
+      font-size: 0.6rem;
+      color: #e8b4e3;
+      position: absolute;
+      top: -4px;
+      animation: sparklePop 2s ease-in-out infinite;
+    }
+    .sparkle-name em::before { left: -14px; animation-delay: 0s; }
+    .sparkle-name em::after  { right: -14px; animation-delay: 1s; }
+    @keyframes sparklePop {
+      0%,100% { opacity:0.3; transform:scale(0.8); }
+      50%     { opacity:1;   transform:scale(1.3); }
+    }
+
+    /* ── Heart burst on click ── */
+    .burst-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999;
+      font-size: var(--s, 1rem);
+      animation: burstFly var(--dur, 0.9s) ease-out forwards;
+      transform-origin: center;
+    }
+    @keyframes burstFly {
+      0%   { opacity:1; transform: translate(0,0) scale(0.5) rotate(0deg); }
+      100% { opacity:0; transform: translate(var(--tx,0px), var(--ty,-80px)) scale(1.2) rotate(var(--rot,20deg)); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Aurora -->
+  <div class="aurora">
+    <div class="aurora-blob"></div>
+    <div class="aurora-blob"></div>
+    <div class="aurora-blob"></div>
+    <div class="aurora-blob"></div>
+  </div>
+
+  <!-- Moon -->
+  <div class="moon"><div class="moon-circle"></div></div>
+
+  <!-- Shooting stars -->
+  <div class="shooting-stars" id="shootingStars"></div>
+
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Floating emojis -->
+  <div class="floaties">
+    <span class="floaty" style="left:8%;top:20%;--d:5s">🌸</span>
+    <span class="floaty" style="left:85%;top:15%;--d:7s;animation-delay:1s">✨</span>
+    <span class="floaty" style="left:75%;top:70%;--d:6s;animation-delay:2s">🌸</span>
+    <span class="floaty" style="left:15%;top:75%;--d:8s;animation-delay:0.5s">💫</span>
+  </div>
+
+  <!-- Main content -->
+  <main class="page-center">
+    <h1 class="eyebrow" style="font-size:30px;">something special is coming !!!</h1>
+
+    <h1 class="main-title" style="font-size:50px;">
+      Your Day Is<br/>
+      <em>Almost Here</em> 🎂
+    </h1>
+
+    <p class="subtitle" style="font-weight:600;font-size:24px;">this surprise is just for you, my love ..</p>
+
+    <div class="countdown-grid">
+      <div class="unit"><div class="num" id="d">--</div><div class="lbl">Days</div></div>
+      <div class="unit"><div class="num" id="h">--</div><div class="lbl">Hours</div></div>
+      <div class="unit"><div class="num" id="m">--</div><div class="lbl">Mins</div></div>
+      <div class="unit"><div class="num" id="s">--</div><div class="lbl">Secs</div></div>
+    </div>
+
+    <p class="lock-msg" id="lockMsg">🔒 &nbsp;the surprise unlocks at midnight on your birthday</p>
+  </main>
+
+  <!-- Sparkle name -->
+  <div class="sparkle-name">
+    <span>made with 💜 for <em>Puta</em></span> <!-- ✏️ EDIT: his name -->
+  </div>
+
+  <script>
+    // ── Countdown ──
+    const BIRTHDAY = new Date(0,0,0, 0, 0, 1000); // 15 June 2026
+    function tick() {
+      const diff = BIRTHDAY - new Date();
+      if (diff <= 0) { window.location.href = 'reveal.html'; return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('d').textContent = String(d).padStart(2,'0');
+      document.getElementById('h').textContent = String(h).padStart(2,'0');
+      document.getElementById('m').textContent = String(m).padStart(2,'0');
+      document.getElementById('s').textContent = String(s).padStart(2,'0');
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // ── Lock message hover secret ──
+    const lockMsg = document.getElementById('lockMsg');
+    const orig = lockMsg.innerHTML;
+    lockMsg.addEventListener('mouseenter', () => {
+      lockMsg.innerHTML = '💜 &nbsp;…something I made just for you';
+    });
+    lockMsg.addEventListener('mouseleave', () => {
+      lockMsg.innerHTML = orig;
+    });
+
+    // ── Stars ──
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${Math.random()*2+1}px;height:${Math.random()*2+1}px;--d:${Math.random()*3+1.5}s;animation-delay:${Math.random()*3}s`;
+      starsEl.appendChild(s);
+    }
+
+    // ── Shooting stars ──
+    const ssContainer = document.getElementById('shootingStars');
+    const shootData = [
+      { top:8,  left:10, len:180, dur:3.2, delay:1,   angle:-18 },
+      { top:18, left:55, len:140, dur:2.8, delay:4,   angle:-22 },
+      { top:5,  left:30, len:220, dur:3.8, delay:7,   angle:-15 },
+      { top:25, left:70, len:160, dur:2.5, delay:10,  angle:-20 },
+      { top:12, left:80, len:130, dur:3.0, delay:2.5, angle:-25 },
+      { top:35, left:20, len:190, dur:4.0, delay:13,  angle:-17 },
+      { top:8,  left:45, len:150, dur:2.6, delay:16,  angle:-21 },
+    ];
+    shootData.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'shooting-star';
+      el.style.cssText = `top:${d.top}%;left:${d.left}%;width:${d.len}px;--dur:${d.dur}s;--delay:${d.delay}s;--angle:${d.angle}deg;--dist:${d.len + 60}px`;
+      ssContainer.appendChild(el);
+    });
+
+    const heartEmojis = ['💜','🌸','💕','✨','💫','🌷','❤️','🩷'];
+    document.addEventListener('click', (e) => {
+      const count = 8;
+      for (let i = 0; i < count; i++) {
+        const h = document.createElement('div');
+        h.className = 'burst-heart';
+        h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        const angle  = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.5;
+        const dist   = 60 + Math.random() * 60;
+        const tx     = Math.cos(angle) * dist;
+        const ty     = Math.sin(angle) * dist - 40;
+        const size   = 0.8 + Math.random() * 0.8;
+        const dur    = 0.7 + Math.random() * 0.5;
+        const rot    = (Math.random() - 0.5) * 60;
+        h.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;--tx:${tx}px;--ty:${ty}px;--s:${size}rem;--dur:${dur}s;--rot:${rot}deg`;
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), dur * 1000 + 100);
+      }
+    });
+  </script>
+</body>
+</html>

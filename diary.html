@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leave me a note 💌</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Serif+Display:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --rose: #f2a7c3; --rose-d: #d4678e;
+      --lav: #c9b4f5; --lav-d: #8b6bd4;
+      --gold: #f5d98b; --cream: #fdf6f0;
+      --ink: #1a0e2a;
+    }
+    html, body { min-height: 100%; width: 100%; overflow-x: hidden; }
+    body {
+      background: #0d0618;
+      font-family: 'Jost', sans-serif;
+      color: var(--cream);
+      display: flex; flex-direction: column; align-items: center;
+      min-height: 100vh;
+    }
+
+    .blob { position: fixed; border-radius: 50%; filter: blur(90px); opacity: 0.14; pointer-events: none; animation: drift 14s ease-in-out infinite alternate; }
+    .blob-1 { width: 460px; height: 460px; background: #9b4fd6; top: -100px; left: -120px; }
+    .blob-2 { width: 340px; height: 340px; background: #e85d9a; bottom: -60px; right: -80px; animation-delay: 5s; }
+    @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(25px,15px) scale(1.06); } }
+
+    #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d) ease-in-out infinite alternate; }
+    @keyframes twinkle { from { opacity: 0.1; transform: scale(0.8); } to { opacity: 0.85; transform: scale(1.2); } }
+
+    .petal { position: fixed; width: 9px; height: 13px; border-radius: 60% 40% 60% 40%; opacity: 0; animation: fall linear infinite; pointer-events: none; z-index: 0; }
+    @keyframes fall {
+      0% { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.35; }
+      100% { transform: translateY(105vh) rotate(380deg); opacity: 0; }
+    }
+
+    /* ── TABS ── */
+    .page-wrap {
+      position: relative; z-index: 10;
+      width: 100%; max-width: 640px;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--lav);
+      text-align: center;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+      animation: fadeUp 0.6s ease both;
+    }
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(2rem, 6vw, 3rem);
+      text-align: center;
+      line-height: 1.1;
+      margin-bottom: 0.3rem;
+      animation: fadeUp 0.6s 0.08s ease both;
+    }
+    .page-title .hl { color: var(--rose); }
+    .page-sub {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 2.4rem;
+      animation: fadeUp 0.6s 0.14s ease both;
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 12px; justify-content: center;
+      margin: 0 0 2.4rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; max-width: 100px; height: 0.5px;
+      background: linear-gradient(to right, transparent, rgba(242,167,195,0.4), transparent);
+    }
+
+    /* tab switcher */
+    .tab-bar {
+      display: flex;
+      background: rgba(255,255,255,0.04);
+      border: 0.5px solid rgba(242,167,195,0.15);
+      border-radius: 50px;
+      padding: 4px;
+      margin-bottom: 2.4rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-radius: 50px;
+      padding: 0.65rem 1rem;
+      color: rgba(255,255,255,0.4);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--rose), var(--lav));
+      color: var(--ink);
+      box-shadow: 0 2px 14px rgba(242,167,195,0.3);
+    }
+
+    /* ── WRITE TAB ── */
+    #tab-write, #tab-read { animation: fadeUp 0.5s ease both; }
+    #tab-read { display: none; }
+
+    .form-card {
+      background: rgba(255,255,255,0.025);
+      border: 0.5px solid rgba(242,167,195,0.15);
+      border-radius: 16px;
+      padding: 2rem 1.8rem;
+      position: relative;
+    }
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 30px; right: 30px; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(242,167,195,0.4), transparent);
+    }
+
+    .field-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--lav);
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+    .field-wrap { margin-bottom: 1.6rem; }
+    .field-wrap:last-of-type { margin-bottom: 0; }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 0.5px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.08rem;
+      padding: 0.9rem 1rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.25s;
+      line-height: 1.7;
+    }
+    textarea:focus, input[type="text"]:focus {
+      border-color: rgba(242,167,195,0.45);
+    }
+    textarea::placeholder, input::placeholder { color: rgba(255,255,255,0.2); font-style: italic; }
+    textarea { min-height: 130px; }
+
+    .char-count {
+      text-align: right;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.2);
+      margin-top: 0.3rem;
+      transition: color 0.2s;
+    }
+
+    .submit-row {
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 2rem; gap: 12px;
+    }
+    .submit-btn {
+      background: linear-gradient(135deg, var(--rose), var(--lav));
+      color: var(--ink);
+      border: none;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      padding: 0.85rem 2.6rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 28px rgba(242,167,195,0.3);
+      transition: transform 0.15s, box-shadow 0.2s;
+    }
+    .submit-btn:hover { transform: scale(1.06); box-shadow: 0 0 44px rgba(242,167,195,0.5); }
+    .submit-btn:active { transform: scale(0.97); }
+    .submit-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+    /* success state */
+    .success-msg {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      text-align: center;
+      padding: 2rem 0;
+      animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes popIn { from { opacity:0; transform:scale(0.5); } to { opacity:1; transform:scale(1); } }
+    .success-msg .s-icon { font-size: 3rem; }
+    .success-msg .s-title { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 1.8rem; color: var(--rose); }
+    .success-msg .s-sub { font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(255,255,255,0.45); font-size: 1rem; }
+    .read-link {
+      margin-top: 1.2rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--lav);
+      background: none;
+      border: 0.5px solid rgba(201,180,245,0.35);
+      border-radius: 50px;
+      padding: 0.6rem 1.6rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: 'Jost', sans-serif;
+      font-weight: 500;
+    }
+    .read-link:hover { background: rgba(201,180,245,0.1); }
+
+    /* ── READ TAB ── */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: rgba(255,255,255,0.25);
+      font-size: 1.05rem;
+    }
+    .entry-card {
+      background: rgba(255,255,255,0.025);
+      border: 0.5px solid rgba(242,167,195,0.15);
+      border-radius: 14px;
+      padding: 1.6rem 1.6rem;
+      margin-bottom: 1.2rem;
+      position: relative;
+      animation: fadeUp 0.5s ease both;
+    }
+    .entry-card::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 24px; right: 24px; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(242,167,195,0.3), transparent);
+    }
+    .entry-date {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      margin-bottom: 0.8rem;
+    }
+    .entry-reaction {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.08rem;
+      font-style: italic;
+      color: rgba(253,246,240,0.8);
+      line-height: 1.75;
+      margin-bottom: 1rem;
+      border-left: 1.5px solid rgba(242,167,195,0.35);
+      padding-left: 1rem;
+    }
+    .entry-message {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      color: rgba(253,246,240,0.65);
+      line-height: 1.75;
+    }
+    .entry-wish {
+      margin-top: 0.8rem;
+      padding: 0.7rem 1rem;
+      background: rgba(201,180,245,0.07);
+      border-radius: 8px;
+      border: 0.5px solid rgba(201,180,245,0.15);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--lav);
+    }
+    .entry-wish::before { content: '✦  '; font-style: normal; }
+
+    .entry-label {
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.22);
+      margin-bottom: 0.3rem;
+    }
+
+    .clear-btn {
+      display: block;
+      margin: 2rem auto 0;
+      background: transparent;
+      border: 0.5px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.2);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.5rem 1.4rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .clear-btn:hover { color: rgba(255,100,100,0.5); border-color: rgba(255,100,100,0.2); }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div id="stars"></div>
+  <div id="petals"></div>
+
+  <div class="page-wrap">
+    <p class="eyebrow">your turn now</p>
+    <h1 class="page-title">Leave me <span class="hl">a note</span></h1>
+    <p class="page-sub">say whatever's on your heart 💜</p>
+    <div class="divider"></div>
+
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-write-btn" onclick="switchTab('write')">Write ✍️</button>
+      <button class="tab-btn" id="tab-read-btn" onclick="switchTab('read')">Read back 💌</button>
+    </div>
+
+    <!-- WRITE TAB -->
+    <div id="tab-write">
+      <div class="form-card" id="form-area">
+        <div class="field-wrap">
+          <label class="field-label" for="field-reaction">How did this surprise make you feel?</label>
+          <textarea id="field-reaction" placeholder="Tell me everything… the moment you saw it, what you felt, all of it 🥺" maxlength="600" oninput="updateCount('field-reaction','count-reaction',600)"></textarea>
+          <div class="char-count" id="count-reaction">600 left</div>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label" for="field-message">A message for me 💜</label>
+          <textarea id="field-message" placeholder="Anything you want me to know… a memory, a feeling, a promise 🌙" maxlength="800" oninput="updateCount('field-message','count-message',800)"></textarea>
+          <div class="char-count" id="count-message">800 left</div>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label" for="field-wish">One birthday wish 🌠</label>
+          <input type="text" id="field-wish" placeholder="what are you wishing for?" maxlength="200"/>
+        </div>
+
+        <div class="submit-row">
+          <button class="submit-btn" id="submit-btn" onclick="submitEntry()">Send it to you 💌</button>
+        </div>
+      </div>
+
+      <!-- Success -->
+      <div class="success-msg" id="success">
+        <div class="s-icon">💌</div>
+        <div class="s-title">Delivered with love</div>
+        <div class="s-sub">She'll treasure every word you wrote 🥺</div>
+        <button class="read-link" onclick="switchTab('read')">Read it back →</button>
+      </div>
+    </div>
+
+    <!-- READ TAB -->
+    <div id="tab-read">
+      <div id="entries-wrap"></div>
+      <button class="clear-btn" onclick="clearAll()">clear all entries</button>
+    </div>
+  </div>
+
+  <script>
+    // Stars
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 70; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const sz = Math.random()*2+0.5;
+      s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s`;
+      starsEl.appendChild(s);
+    }
+    // Petals
+    const pColors = ['#f2a7c3','#c9b4f5','#f5d98b','#f7c0d8'];
+    const petalsEl = document.getElementById('petals');
+    for (let i = 0; i < 14; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.cssText = `left:${Math.random()*100}%;background:${pColors[i%pColors.length]};animation-duration:${(Math.random()*8+7).toFixed(1)}s;animation-delay:${(Math.random()*10).toFixed(1)}s`;
+      petalsEl.appendChild(p);
+    }
+
+    // Storage key
+    const STORE_KEY = 'birthday_notes_2025';
+
+    function getEntries() {
+      try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+      catch { return []; }
+    }
+    function saveEntries(arr) {
+      localStorage.setItem(STORE_KEY, JSON.stringify(arr));
+    }
+
+    function updateCount(fieldId, countId, max) {
+      const val = document.getElementById(fieldId).value.length;
+      const el = document.getElementById(countId);
+      el.textContent = `${max - val} left`;
+      el.style.color = (max - val) < 50 ? 'rgba(242,167,195,0.6)' : 'rgba(255,255,255,0.2)';
+    }
+
+    function submitEntry() {
+      const reaction = document.getElementById('field-reaction').value.trim();
+      const message  = document.getElementById('field-message').value.trim();
+      const wish     = document.getElementById('field-wish').value.trim();
+
+      if (!reaction && !message) {
+        document.getElementById('field-reaction').focus();
+        return;
+      }
+
+      const entry = {
+        date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' }),
+        reaction, message, wish,
+        ts: Date.now()
+      };
+
+      const entries = getEntries();
+      entries.unshift(entry); // newest first
+      saveEntries(entries);
+
+      // show success
+      document.getElementById('form-area').style.display = 'none';
+      document.getElementById('success').style.display = 'flex';
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tab-write').style.display = tab === 'write' ? 'block' : 'none';
+      document.getElementById('tab-read').style.display  = tab === 'read'  ? 'block' : 'none';
+      document.getElementById('tab-write-btn').className = 'tab-btn' + (tab === 'write' ? ' active' : '');
+      document.getElementById('tab-read-btn').className  = 'tab-btn' + (tab === 'read'  ? ' active' : '');
+      if (tab === 'read') renderEntries();
+    }
+
+    function renderEntries() {
+      const wrap = document.getElementById('entries-wrap');
+      const entries = getEntries();
+      if (!entries.length) {
+        wrap.innerHTML = '<div class="empty-state">No notes yet… he hasn\'t written anything 🥺<br>Come back after he fills it in 💌</div>';
+        return;
+      }
+      wrap.innerHTML = entries.map((e, i) => `
+        <div class="entry-card" style="animation-delay:${i*0.07}s">
+          <div class="entry-date">${e.date}</div>
+          ${e.reaction ? `<div class="entry-label">His reaction</div><div class="entry-reaction">${escHtml(e.reaction)}</div>` : ''}
+          ${e.message  ? `<div class="entry-label" style="margin-top:0.8rem">A message for you</div><div class="entry-message">${escHtml(e.message)}</div>` : ''}
+          ${e.wish     ? `<div class="entry-wish">${escHtml(e.wish)}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function clearAll() {
+      if (confirm('Clear all notes? This cannot be undone.')) {
+        localStorage.removeItem(STORE_KEY);
+        renderEntries();
+      }
+    }
+
+    function escHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    }
+
+    // Init
+    renderEntries();
+  </script>
+</body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday! 🎉</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    canvas { position:fixed; inset:0; pointer-events:none; z-index:1; }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 3rem;
+    }
+
+    /* TOP heading */
+    .top-heading {
+      text-align: center;
+      margin-bottom: 1.2rem;
+      animation: pop 0.7s cubic-bezier(0.36,0.07,0.19,0.97) both;
+    }
+    .happy-bday {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+    .happy-bday span { color: #e8b4e3; }
+    .birthday-name {
+      font-size: 0.85rem;
+      color: #c9a0dc;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+    @keyframes pop {
+      0%   { opacity:0; transform:scale(0.5); }
+      70%  { transform:scale(1.06); }
+      100% { opacity:1; transform:scale(1); }
+    }
+
+    /* TWO COLUMNS */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      flex: 1;
+      margin-bottom: 1.2rem;
+    }
+
+    /* LEFT column */
+    .col-message {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeUp 0.8s 0.5s ease both;
+    }
+    .message-label {
+      font-size: 25px;
+      letter-spacing: 0.25em;
+      color: #e8c1e6;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .message-box {
+      background: rgba(255,255,255,0.05);
+      border: 0.5px solid rgba(200,160,220,0.2);
+      border-radius: 16px;
+      padding: 1rem 1.1rem;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #e8deec;
+      line-height: 1.8;
+      font-weight: 800;
+      backdrop-filter: blur(6px);
+    }
+    .memory-cards { display:flex; flex-direction:column; gap:8px; }
+    .memory-card {
+      background: rgba(255,255,255,0.04);
+      border: 0.5px solid rgba(200,160,220,0.15);
+      border-radius: 12px;
+      padding: 0.65rem 0.9rem;
+      backdrop-filter: blur(4px);
+    }
+    .mc-label {
+      font-size: 18px;
+      letter-spacing: 0.1em;
+      color: #dacde2;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+      font-weight: 800;
+    }
+    .mc-text {
+      font-size: 1rem;
+      color: #d4b8e0;
+      font-style: italic;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    /* RIGHT column — photos stacked */
+    .col-photos {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeUp 0.8s 0.6s ease both;
+    }
+    .photo-slot {
+      flex: 1;
+      border-radius: 14px;
+      border: 0.5px solid rgba(200,160,220,0.25);
+      overflow: hidden;
+      background: rgba(200,160,220,0.08);
+      box-shadow: 0 4px 20px rgba(200,160,220,0.12);
+      max-height: 500px;
+    }
+    .photo-slot img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.4s ease;
+    }
+    .photo-slot img:hover { transform: scale(1.04); }
+    .photo-slot .placeholder {
+      width: 100%; height: 100%; min-height: 80px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; color: #9b7fb6;
+    }
+
+    /* BOTTOM BAR */
+    .bottom-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: fadeUp 0.8s 0.9s ease both;
+    }
+    .song-player {
+      flex: 1;
+      min-width: 0;
+      background: rgba(255,255,255,0.06);
+      border: 0.5px solid rgba(200,160,220,0.2);
+      border-radius: 14px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      backdrop-filter: blur(6px);
+    }
+    .play-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: #c9a0dc;
+      border: none; cursor: pointer;
+      font-size: 14px; flex-shrink: 0;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(200,160,220,0.45);
+      color: #0a0510;
+    }
+    .play-btn:hover { transform: scale(1.1); }
+    .song-info { text-align: left; overflow: hidden; }
+    .song-title { font-size:1.5rem; font-weight:600; color:#f0d6f5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .song-sub   { font-size:0.9rem; color:#bca7d0; margin-top:2px; font-style:italic; font-weight:600; }
+    .next-btn   { flex-shrink: 0; white-space: nowrap; }
+
+    /* playing pulse on button */
+    @keyframes playPulse {
+      0%,100% { box-shadow: 0 4px 14px rgba(200,160,220,0.45); }
+      50%      { box-shadow: 0 4px 28px rgba(200,160,220,0.9); }
+    }
+    .play-btn.playing { animation: playPulse 1.4s ease-in-out infinite; }
+
+    /* Floating hearts */
+    .hearts { position:fixed; inset:0; pointer-events:none; z-index:0; }
+    .hrt {
+      position: absolute;
+      animation: riseHeart var(--d,4s) ease-in infinite;
+      opacity: 0; font-size: var(--s,1rem);
+    }
+    @keyframes riseHeart {
+      0%  { opacity:0; transform:translateY(0) scale(0.8); }
+      15% { opacity:0.6; }
+      100%{ opacity:0; transform:translateY(-220px) scale(1.1); }
+    }
+
+    /* Mobile */
+    @media (max-width: 540px) {
+      .page { padding: 1.5rem 1rem; }
+      .two-col { grid-template-columns: 1fr; }
+      .col-photos { flex-direction: row; height: 110px; }
+      .bottom-bar { flex-direction: column; align-items: stretch; }
+      .next-btn { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+  <div class="stars" id="stars"></div>
+  <div class="hearts" id="hearts"></div>
+
+  <div class="page">
+
+    <!-- TOP -->
+    <div class="top-heading">
+      <h1 class="happy-bday">
+        Happy Birthday,
+        <!-- ✏️ EDIT: his name -->
+        <span>Boobie Bachcha 🎂</span>
+      </h1>
+      <!-- ✏️ EDIT: his name -->
+      <p class="birthday-name">✨ The one and only [His Name] ✨</p>
+    </div>
+
+    <!-- TWO COLUMNS -->
+    <div class="two-col">
+
+      <!-- LEFT: message + memory cards -->
+      <div class="col-message">
+        <div class="message-label">Some notes for you 💌</div>
+
+        <!-- ✏️ EDIT: your main message -->
+        <div class="message-box">
+          Har din tumse pyaar aur badhta jaaraha hai — you are my forever. ❤️
+        </div>
+
+        <div class="memory-cards">
+          <div class="memory-card">
+            <div class="mc-label">days together 🗓</div>
+            <div class="mc-text" id="days-together">calculating...</div>
+          </div>
+          <div class="memory-card">
+            <div class="mc-label">my favourite memory 🌸</div>
+            <!-- ✏️ EDIT -->
+            <div class="mc-text">The first time we held hands, we promised we would never let go.</div>
+          </div>
+          <div class="memory-card">
+            <div class="mc-label">what i love most 💜</div>
+            <!-- ✏️ EDIT -->
+            <div class="mc-text">Every time you laugh at my jokes, it makes me love you even more. 😂</div>
+          </div>
+          <div class="memory-card">
+            <div class="mc-label">turning today 🎂</div>
+            <div class="mc-text">25 years of the most amazing person 💜</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: photos stacked -->
+      <div class="col-photos">
+        <div class="photo-slot">
+           <img src="assets/photos/photso.jpg" alt="us">
+          <!-- <div class="placeholder">📸</div> -->
+      </div>
+
+    </div>
+
+    <!-- BOTTOM BAR — song plays in background, nothing moves -->
+    <div class="bottom-bar">
+      <div class="song-player">
+        <button class="play-btn" id="playBtn" onclick="toggleSong()">▶</button>
+        <div class="song-info">
+          <!-- ✏️ EDIT: your song name & artist -->
+          <div class="song-title">Song For You 🎵</div>
+          <div class="song-sub">Press play for something special.....</div>
+        </div>
+      </div>
+      <a href="questions.html" class="next-btn btn-pill" style="font-size:1.1rem;font-weight:800;">Click Next → 💭</a>
+    </div>
+
+  </div>
+
+  <script>
+    // Stars
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 60; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${Math.random()*2+1}px;height:${Math.random()*2+1}px;--d:${Math.random()*3+1.5}s;animation-delay:${Math.random()*3}s`;
+      starsEl.appendChild(s);
+    }
+
+    // Floating hearts
+    const heartsEl = document.getElementById('hearts');
+    const hEmojis = ['💜','🌸','💕','✨','💫','🌷'];
+    for (let i = 0; i < 12; i++) {
+      const h = document.createElement('div');
+      h.className = 'hrt';
+      h.textContent = hEmojis[Math.floor(Math.random() * hEmojis.length)];
+      h.style.cssText = `left:${Math.random()*90+5}%;bottom:${Math.random()*20}%;--d:${Math.random()*3+3.5}s;--s:${Math.random()*0.6+0.7}rem;animation-delay:${Math.random()*5}s`;
+      heartsEl.appendChild(h);
+    }
+
+    // Confetti
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+    const colors = ['#e8b4e3','#c9a0dc','#f0d6f5','#ffe4f0','#ffd6ff','#ffb3de','#fff'];
+    const pieces = Array.from({length:100}, () => ({
+      x:Math.random()*canvas.width, y:Math.random()*-canvas.height,
+      r:Math.random()*5+2, color:colors[Math.floor(Math.random()*colors.length)],
+      speed:Math.random()*2.5+1, swing:Math.random()*2.5,
+      angle:Math.random()*Math.PI*2, rot:Math.random()*360, rotSpeed:Math.random()*4-2,
+    }));
+    function drawConfetti() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      pieces.forEach(p => {
+        p.y+=p.speed; p.angle+=0.04; p.x+=Math.sin(p.angle)*p.swing; p.rot+=p.rotSpeed;
+        if(p.y>canvas.height){p.y=-10;p.x=Math.random()*canvas.width;}
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+        ctx.fillStyle=p.color; ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r); ctx.restore();
+      });
+      requestAnimationFrame(drawConfetti);
+    }
+    drawConfetti();
+
+    // Days together
+    const TOGETHER_SINCE = new Date(2020, 9, 3); // 3 Oct 2020
+    const diffDays = Math.floor((new Date() - TOGETHER_SINCE) / 86400000);
+    document.getElementById('days-together').textContent = `${diffDays.toLocaleString()} days and counting ...💜`;
+
+    // ── Song toggle — plays in background, NOTHING moves on screen ──
+    let songPlaying = false;
+    function toggleSong() {
+      songPlaying = !songPlaying;
+      const btn = document.getElementById('playBtn');
+
+      if (songPlaying) {
+        // Create tiny invisible iframe — no layout shift at all
+        const iframe = document.createElement('iframe');
+        iframe.id = 'yt-player';
+  
+        iframe.src = 'https://www.youtube.com/embed/xlNek_Oe12Y?autoplay=1&controls=0';
+        iframe.allow = 'autoplay; encrypted-media';
+        iframe.style.cssText = 'position:fixed;width:1px;height:1px;top:0;left:0;opacity:0;pointer-events:none;border:none;';
+        document.body.appendChild(iframe);
+        btn.textContent = '⏸';
+        btn.classList.add('playing');
+      } else {
+        // Remove iframe completely to stop audio
+        const old = document.getElementById('yt-player');
+        if (old) old.remove();
+        btn.textContent = '▶';
+        btn.classList.remove('playing');
+      }
+    }
+  </script>
+</body>
+</html>
