@@ -1,0 +1,261 @@
+/* ── LIGHT MODE overrides ── */
+body.light {
+  background: #fdf0f8 !important;
+  color: #2a1040 !important;
+}
+
+/* blobs lighter */
+body.light .blob,
+body.light .aurora-blob {
+  opacity: 0.12 !important;
+}
+
+/* stars hidden in light mode */
+body.light #stars .star { background: #c9a0dc !important; opacity: 0.25 !important; }
+
+/* petals more visible */
+body.light 
+.petal { opacity: 0.6 !important; }
+
+/* cards */
+body.light .paper,
+body.light .form-card,
+body.light .entry-card,
+body.light .confirm-card,
+body.light .unit,
+body.light .message-box,
+body.light .memory-card,
+body.light .song-player,
+body.light .result-card,
+body.light .result-ring {
+  background: rgba(255,255,255,0.75) !important;
+  border-color: rgba(180,120,200,0.3) !important;
+  color: #2a1040 !important;
+}
+
+/* text */
+body.light .q-title,
+body.light .q-number,
+body.light .q-sub,
+body.light .letter-body,
+body.light .letter-opening,
+body.light .result-title,
+body.light .result-sub,
+body.light .eyebrow,
+body.light .page-title,
+body.light .page-sub,
+body.light .mc-text,
+body.light .mc-label,
+body.light .message-label,
+body.light .happy-bday,
+body.light .birthday-name,
+body.light .song-title,
+body.light .song-sub,
+body.light .letter-sign,
+body.light .letter-eyebrow,
+body.light .letter-to,
+body.light h1, body.light h2, body.light p {
+  color: #2a1040 !important;
+}
+
+body.light .q-sub,
+body.light .page-sub,
+body.light .result-sub,
+body.light .letter-body {
+  color: rgba(42,16,64,0.65) !important;
+}
+
+/* inputs */
+body.light textarea,
+body.light input[type="text"] {
+  background: rgba(255,255,255,0.8) !important;
+  border-color: rgba(180,120,200,0.35) !important;
+  color: #2a1040 !important;
+}
+body.light textarea::placeholder,
+body.light input::placeholder { color: rgba(42,16,64,0.35) !important; }
+
+/* progress dots */
+body.light .dot { background: rgba(42,16,64,0.15) !important; }
+body.light .dot.active { background: #c9a0dc !important; }
+body.light .dot.done   { background: #a07ab8 !important; }
+
+/* ornament */
+body.light .ornament::before,
+body.light .ornament::after { background: linear-gradient(to right, transparent, rgba(180,120,200,0.4), transparent) !important; }
+
+/* letter page */
+body.light .paper { box-shadow: 0 4px 40px rgba(180,120,200,0.15) !important; }
+body.light .corner { color: rgba(180,120,200,0.3) !important; }
+
+/* tab bar */
+body.light .tab-bar { background: rgba(255,255,255,0.6) !important; border-color: rgba(180,120,200,0.25) !important; }
+body.light .tab-btn { color: rgba(42,16,64,0.5) !important; }
+
+/* countdown units */
+body.light .num { color: #8b4db5 !important; }
+body.light .lbl { color: #9b7fb6 !important; }
+body.light .lock-msg { color: #7a5f8a !important; }
+
+/* moon in light */
+body.light .moon-circle {
+  background: radial-gradient(circle at 35% 35%, #ffe8a0, #f5c842) !important;
+  box-shadow: 0 0 24px 8px rgba(245,200,66,0.3), 0 0 60px 20px rgba(245,200,66,0.15) !important;
+}
+
+/* next/submit buttons unchanged — they already work on both */
+
+/* No btn light */
+body.light #no-btn {
+  background: linear-gradient(135deg, rgba(160,80,210,0.2) 0%, rgba(220,80,140,0.15) 100%) !important;
+  color: #6a2090 !important;
+  border-color: rgba(160,80,210,0.45) !important;
+}
+body.light #no-btn:hover {
+  background: linear-gradient(135deg, rgba(160,80,210,0.35) 0%, rgba(220,80,140,0.28) 100%) !important;
+}
+
+/* confetti/canvas stays as is */
+
+/* sparkle name */
+body.light .sparkle-name span { color: #7a5f8a !important; }
+
+/* ── THEME TOGGLE BUTTON (works on all pages) ── */
+#theme-toggle {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 99998;
+  background: rgba(255,255,255,0.1);
+  color: #e8b4e3;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50px;
+  padding: 0.45rem 1.1rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.15s;
+  letter-spacing: 0.06em;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+#theme-toggle:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.05);
+}
+#theme-toggle:active { transform: scale(0.97); }
+
+/* light mode button style */
+body.light #theme-toggle {
+  background: rgba(255,255,255,0.75);
+  color: #6a2090;
+  border-color: rgba(160,80,210,0.35);
+  box-shadow: 0 2px 12px rgba(160,80,210,0.15);
+}
+body.light #theme-toggle:hover {
+  background: rgba(255,255,255,0.95);
+}
+
+/* ── LIGHT MODE — page backgrounds ── */
+body.light {
+  background: linear-gradient(135deg, #fdf0f8 0%, #f5e8ff 50%, #fce4f0 100%) !important;
+  color: #2a1040 !important;
+}
+
+/* aurora blobs softer in light */
+body.light .aurora-blob { opacity: 0.07 !important; }
+body.light .blob        { opacity: 0.08 !important; }
+
+/* countdown units */
+body.light .unit {
+  background: rgba(255,255,255,0.75) !important;
+  border-color: rgba(180,120,210,0.3) !important;
+  box-shadow: 0 2px 16px rgba(180,120,210,0.1) !important;
+}
+body.light .num   { color: #8b3db5 !important; }
+body.light .lbl   { color: #9b60b6 !important; }
+
+/* text */
+body.light .lock-msg    { color: #7a5f8a !important; }
+body.light .lock-msg:hover { color: #a040c0 !important; }
+body.light .sparkle-name span { color: #7a5f8a !important; }
+body.light .sparkle-name em   { color: #a040c0 !important; }
+
+/* main headings — these use inline styles so we need important */
+body.light .eyebrow,
+body.light .main-title,
+body.light .subtitle,
+body.light h1, body.light p { color: #2a1040 !important; }
+
+/* stars become soft dots in light */
+body.light .star { background: #c9a0dc !important; opacity: 0.2 !important; }
+
+/* shooting stars hidden in light */
+body.light .shooting-star { opacity: 0 !important; }
+
+/* moon brighter in light */
+body.light .moon-circle {
+  background: radial-gradient(circle at 35% 35%, #fffde0, #f5c842) !important;
+  box-shadow: 0 0 30px 10px rgba(245,200,66,0.4), 0 0 70px 25px rgba(245,200,66,0.2) !important;
+}
+
+/* cards on other pages */
+body.light .paper,
+body.light .form-card,
+body.light .entry-card,
+body.light .confirm-card {
+  background: rgba(255,255,255,0.8) !important;
+  border-color: rgba(180,120,200,0.3) !important;
+}
+
+/* inputs */
+body.light textarea,
+body.light input[type="text"] {
+  background: rgba(255,255,255,0.85) !important;
+  border-color: rgba(180,120,200,0.3) !important;
+  color: #2a1040 !important;
+}
+body.light textarea::placeholder,
+body.light input::placeholder { color: rgba(42,16,64,0.3) !important; }
+
+/* letter text */
+body.light .letter-body,
+body.light .letter-opening,
+body.light .letter-sign { color: #2a1040 !important; }
+body.light .letter-body p { color: rgba(42,16,64,0.75) !important; }
+
+/* progress dots */
+body.light .dot { background: rgba(42,16,64,0.15) !important; }
+body.light .dot.active { background: #b060d0 !important; }
+body.light .dot.done   { background: #9070c0 !important; }
+
+/* tab bar */
+body.light .tab-bar { background: rgba(255,255,255,0.65) !important; border-color: rgba(180,120,200,0.25) !important; }
+body.light .tab-btn { color: rgba(42,16,64,0.45) !important; }
+
+/* result card */
+body.light .result-title { color: #c060a0 !important; }
+body.light .result-sub   { color: rgba(42,16,64,0.55) !important; }
+
+/* No btn */
+body.light #no-btn {
+  background: linear-gradient(135deg, rgba(160,80,210,0.18) 0%, rgba(220,80,140,0.12) 100%) !important;
+  color: #6a2090 !important;
+  border-color: rgba(160,80,210,0.4) !important;
+}
+
+/* message/memory cards on reveal page */
+body.light .message-box,
+body.light .memory-card,
+body.light .song-player {
+  background: rgba(255,255,255,0.7) !important;
+  border-color: rgba(180,120,200,0.25) !important;
+  color: #2a1040 !important;
+}
+body.light .mc-text, body.light .mc-label,
+body.light .song-title, body.light .song-sub,
+body.light .message-label { color: #2a1040 !important; }

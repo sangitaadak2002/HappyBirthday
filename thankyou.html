@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank you 💜</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Serif+Display:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --rose: #f2a7c3; --lav: #c9b4f5; --cream: #fdf6f0; --ink: #1a0e2a; }
+    html, body { min-height: 100%; width: 100%; }
+    body {
+      background: #0d0618;
+      font-family: 'Jost', sans-serif;
+      color: var(--cream);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blob { position: fixed; border-radius: 50%; filter: blur(90px); opacity: 0.16; pointer-events: none; animation: drift 14s ease-in-out infinite alternate; }
+    .blob-1 { width: 500px; height: 500px; background: #9b4fd6; top: -120px; left: -140px; }
+    .blob-2 { width: 380px; height: 380px; background: #e85d9a; bottom: -80px; right: -100px; animation-delay: 4s; }
+    @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(28px,18px) scale(1.07); } }
+
+    #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--d) ease-in-out infinite alternate; }
+    @keyframes twinkle { from { opacity: 0.1; } to { opacity: 0.9; } }
+
+    /* CONFETTI */
+    canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+
+    /* CARD */
+    .card {
+      position: relative; z-index: 10;
+      text-align: center;
+      padding: 3rem 2rem;
+      max-width: 460px;
+      width: 100%;
+    }
+
+    /* Big heart pulse */
+    .heart-wrap {
+      font-size: 5rem;
+      margin-bottom: 1.6rem;
+      animation: heartBeat 1.2s ease-in-out infinite;
+      display: block;
+    }
+    @keyframes heartBeat {
+      0%,100% { transform: scale(1); }
+      14%     { transform: scale(1.2); }
+      28%     { transform: scale(1); }
+      42%     { transform: scale(1.15); }
+      70%     { transform: scale(1); }
+    }
+
+    .eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--lav); margin-bottom: 0.8rem; font-weight: 500; animation: fadeUp 0.7s 0.1s ease both; opacity: 0; }
+    .title { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(2.4rem, 8vw, 3.6rem); line-height: 1.1; margin-bottom: 0.6rem; animation: fadeUp 0.7s 0.2s ease both; opacity: 0; }
+    .title .hl { color: var(--rose); }
+
+    .divider { display: flex; align-items: center; gap: 12px; justify-content: center; margin: 1.4rem 0; animation: fadeUp 0.7s 0.28s ease both; opacity: 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; max-width: 80px; height: 0.5px; background: linear-gradient(to right, transparent, rgba(242,167,195,0.4), transparent); }
+    .divider span { color: var(--rose); font-size: 0.7rem; }
+
+    .message {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 2.8rem;
+      animation: fadeUp 0.7s 0.35s ease both;
+      opacity: 0;
+    }
+    .message strong { color: var(--rose); font-style: normal; }
+
+    /* Restart button */
+    .restart-btn {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid rgba(242,167,195,0.45);
+      color: var(--rose);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.4rem;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      animation: fadeUp 0.7s 0.45s ease both;
+      opacity: 0;
+    }
+    .restart-btn:hover {
+      background: rgba(242,167,195,0.08);
+      box-shadow: 0 0 24px rgba(242,167,195,0.2);
+      transform: scale(1.04);
+    }
+
+    /* floating petals */
+    .petal { position: fixed; width: 9px; height: 13px; border-radius: 60% 40% 60% 40%; opacity: 0; animation: fall linear infinite; pointer-events: none; z-index: 0; }
+    @keyframes fall { 0% { transform: translateY(-40px) rotate(0deg); opacity: 0; } 10% { opacity: 0.6; } 90% { opacity: 0.35; } 100% { transform: translateY(105vh) rotate(380deg); opacity: 0; } }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div id="stars"></div>
+  <div id="petals"></div>
+  <canvas id="confetti"></canvas>
+
+  <div class="card">
+    <span class="heart-wrap">💜</span>
+    <p class="eyebrow">message delivered</p>
+    <h1 class="title">She's going to <span class="hl">love this</span></h1>
+    <div class="divider"><span>✦</span></div>
+    <p class="message">
+      Your words have been sent straight to her heart.<br>
+      <strong>She'll treasure every single word.</strong><br><br>
+      Want to go back to the beginning and relive it all again? 🥺
+    </p>
+    <a class="restart-btn" href="index.html">← Start from the beginning</a>
+  </div>
+
+  <script>
+    // Stars
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement('div'); s.className = 'star';
+      const sz = Math.random()*2+0.5;
+      s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s`;
+      starsEl.appendChild(s);
+    }
+    // Petals
+    const pColors = ['#f2a7c3','#c9b4f5','#f5d98b','#f7c0d8'];
+    const petalsEl = document.getElementById('petals');
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div'); p.className = 'petal';
+      p.style.cssText = `left:${Math.random()*100}%;background:${pColors[i%4]};animation-duration:${(Math.random()*8+7).toFixed(1)}s;animation-delay:${(Math.random()*2).toFixed(1)}s`;
+      petalsEl.appendChild(p);
+    }
+
+    // Confetti burst on load
+    const canvas = document.getElementById('confetti');
+    const ctx    = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+    const cols   = ['#f2a7c3','#c9b4f5','#f5d98b','#f7c0d8','#e4b4f7','#ffffff'];
+    const pieces = Array.from({length: 120}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * -canvas.height,
+      r: Math.random() * 5 + 2,
+      color: cols[Math.floor(Math.random() * cols.length)],
+      speed: Math.random() * 2.5 + 1,
+      swing: Math.random() * 2.5,
+      angle: Math.random() * Math.PI * 2,
+      rot: Math.random() * 360,
+      rotSpeed: Math.random() * 4 - 2,
+    }));
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        p.y += p.speed; p.angle += 0.04;
+        p.x += Math.sin(p.angle) * p.swing; p.rot += p.rotSpeed;
+        if (p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI / 180);
+        ctx.fillStyle = p.color; ctx.fillRect(-p.r, -p.r/2, p.r*2, p.r); ctx.restore();
+      });
+      requestAnimationFrame(drawConfetti);
+    }
+    drawConfetti();
+  </script>
+  <script src="theme.js"></script>
+</body>
+</html>

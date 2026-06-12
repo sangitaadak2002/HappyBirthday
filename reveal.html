@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="theme.css">
   <style>
     canvas { position:fixed; inset:0; pointer-events:none; z-index:1; }
 
@@ -253,7 +254,7 @@
       <!-- RIGHT: photos stacked -->
       <div class="col-photos">
         <div class="photo-slot">
-           <img src="assets/photos/photso.jpg" alt="us">
+           <img src="assets/photos/photo2.jpg" alt="us">
           <!-- <div class="placeholder">📸</div> -->
       </div>
 
@@ -261,14 +262,7 @@
 
     <!-- BOTTOM BAR — song plays in background, nothing moves -->
     <div class="bottom-bar">
-      <div class="song-player">
-        <button class="play-btn" id="playBtn" onclick="toggleSong()">▶</button>
-        <div class="song-info">
-          <!-- ✏️ EDIT: your song name & artist -->
-          <div class="song-title">Song For You 🎵</div>
-          <div class="song-sub">Press play for something special.....</div>
-        </div>
-      </div>
+      
       <a href="questions.html" class="next-btn btn-pill" style="font-size:1.1rem;font-weight:800;">Click Next → 💭</a>
     </div>
 
@@ -326,29 +320,29 @@
 
     // ── Song toggle — plays in background, NOTHING moves on screen ──
     let songPlaying = false;
+    let audio = null;
+
     function toggleSong() {
-      songPlaying = !songPlaying;
       const btn = document.getElementById('playBtn');
 
+      if (!audio) {
+        audio = new Audio('assets/oursong.mp3');
+        audio.loop = true; // loops the song
+      }
+
       if (songPlaying) {
-        // Create tiny invisible iframe — no layout shift at all
-        const iframe = document.createElement('iframe');
-        iframe.id = 'yt-player';
-  
-        iframe.src = 'https://www.youtube.com/embed/xlNek_Oe12Y?autoplay=1&controls=0';
-        iframe.allow = 'autoplay; encrypted-media';
-        iframe.style.cssText = 'position:fixed;width:1px;height:1px;top:0;left:0;opacity:0;pointer-events:none;border:none;';
-        document.body.appendChild(iframe);
-        btn.textContent = '⏸';
-        btn.classList.add('playing');
-      } else {
-        // Remove iframe completely to stop audio
-        const old = document.getElementById('yt-player');
-        if (old) old.remove();
+        audio.pause();
         btn.textContent = '▶';
         btn.classList.remove('playing');
+        songPlaying = false;
+      } else {
+        audio.play();
+        btn.textContent = '⏸';
+        btn.classList.add('playing');
+        songPlaying = true;
       }
     }
   </script>
+  <script src="theme.js"></script>
 </body>
 </html>

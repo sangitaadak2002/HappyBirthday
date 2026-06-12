@@ -6,6 +6,7 @@
   <title>A question for you... 💜</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Serif+Display:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -53,7 +54,7 @@
     }
 
     /* LAYOUT */
-    main { position: relative; z-index: 10; text-align: center; padding: 2.5rem 1.5rem; max-width: 420px; width: 100%; }
+    main { position: relative; z-index: 10; text-align: center; padding: 2.5rem 1.5rem; max-width: 530px; width: 100%; }
 
     /* PROGRESS */
     .progress-wrap { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 2.8rem; animation: fadeUp 0.7s ease both; }
@@ -62,10 +63,10 @@
     .dot.done   { background: var(--lavender); }
 
     /* QUESTION */
-    .q-number { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase; color: var(--lavender); margin-bottom: 1.2rem; animation: fadeUp 0.7s 0.05s ease both; }
-    .q-title  { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 7vw, 2.8rem); line-height: 1.18; font-style: italic; margin-bottom: 0.8rem; animation: fadeUp 0.7s 0.12s ease both; }
+    .q-number { font-size: 1rem; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase; color: var(--lavender); margin-bottom: 1.2rem; animation: fadeUp 0.7s 0.05s ease both; }
+    .q-title  { font-family: 'DM Serif Display', serif;font-size: clamp(3rem, 10vw, 5rem); line-height: 1.18; font-style: italic; margin-bottom: 0.8rem; animation: fadeUp 0.7s 0.12s ease both; }
     .q-title .hl { color: var(--rose); }
-    .q-sub    { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-style: italic; color: rgba(255,255,255,0.5); margin-bottom: 3.2rem; animation: fadeUp 0.7s 0.2s ease both; }
+    .q-sub    { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-style: italic; color: rgba(244, 237, 237, 0.916); margin-bottom: 3.2rem; animation: fadeUp 0.7s 0.2s ease both; }
 
     /* ORNAMENT */
     .ornament { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 2.8rem; animation: fadeUp 0.7s 0.16s ease both; }
@@ -81,7 +82,7 @@
       z-index: 10; /* lower than no-btn */
       background: linear-gradient(135deg, var(--rose) 0%, var(--lavender) 100%);
       color: var(--ink); border: none;
-      font-family: 'DM Serif Display', serif; font-size: 1.15rem; font-style: italic;
+      font-family: 'DM Serif Display', serif; font-size: 1.8rem; font-style: italic;
       padding: 0.85rem 2.8rem; border-radius: 50px; cursor: pointer;
       letter-spacing: 0.02em;
       transition: transform 0.15s, box-shadow 0.2s;
@@ -100,7 +101,7 @@
       color: #f5e0ff;
       border: 1.5px solid rgba(220, 160, 255, 0.75);
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
+      font-size: 1.5rem;
       font-style: italic;
       font-weight: 600;
       padding: 0.75rem 2rem;
@@ -128,8 +129,8 @@
 
     .result-ring { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, rgba(242,167,195,0.2), rgba(201,180,245,0.2)); border: 1px solid rgba(242,167,195,0.3); display: flex; align-items: center; justify-content: center; font-size: 2.6rem; margin-bottom: 0.5rem; position: relative; }
     .result-ring::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 0.5px solid rgba(242,167,195,0.2); }
-    .result-title { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 2rem; color: var(--rose); line-height: 1.1; }
-    .result-sub   { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: rgba(255,255,255,0.5); font-style: italic; }
+    .result-title { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 4.5rem; color: var(--rose); line-height: 1.1; }
+    .result-sub   { font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: rgba(255, 255, 255, 0.889); font-style: italic; }
 
     .next-btn { margin-top: 1.6rem; background: transparent; border: 0.5px solid rgba(242,167,195,0.5); color: var(--rose); font-family: 'Jost', sans-serif; font-size: 0.88rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.75rem 2.2rem; border-radius: 50px; cursor: pointer; transition: background 0.2s, transform 0.15s; }
     .next-btn:hover { background: rgba(242,167,195,0.1); transform: scale(1.04); }
@@ -164,7 +165,7 @@
 
     <div class="result-card" id="result">
       <div class="result-ring" id="r-emoji">💜</div>
-      <div class="result-title" id="r-text">I knew it!</div>
+      <div class="result-title" id="r-text">Yaaaaaa!! I knew it!</div>
       <div class="result-sub"   id="r-sub">The correct answer 🥰</div>
       <button class="next-btn"  id="next-btn" onclick="nextQuestion()">Next →</button>
     </div>
@@ -175,9 +176,9 @@
 
   <script>
     const questions = [
-      { q: 'Do you <span class="hl">love me?</span>',                   sub: 'think carefully before answering 👀', emoji: '💜', winText: 'I knew it!',      winSub: 'The correct answer 🥰' },
-      { q: 'Am I the <span class="hl">most amazing</span> girlfriend?', sub: 'there is only one right answer 😇',   emoji: '🌸', winText: 'Obviously yes!', winSub: 'Smart boy 😘' },
-      { q: 'Best day of <span class="hl">your life?</span>',            sub: "(hint: it's today 🎂)",               emoji: '✨', winText: 'Correct!!!',     winSub: 'Happy birthday my love 🎂', isLast: true },
+      { q: 'Do you <span class="hl">love me?</span>',                   sub: 'think carefully before answering 👀', emoji: '💜', winText: 'Yaaaaaa!! I knew it!',      winSub: 'I love you 😘 toooooooooooooooooooooooooo bubu... onek valobasi tomake. golu ta amr 💜 🥰' },
+      { q: 'Ami e tomar ekmatro pagli Bou to?', sub: 'Haa ki naa ans dao 😇',   emoji: '🌸', winText: 'Eito amar guduuuu bachchaa', winSub: 'ummmmmmaaaahhhhhh!!!!😘💋💋💋' },
+      { q: 'Will you <span class="hl">marry me babe? 🫣</span>',            sub: "(hint: yesss!!!! yessss!!!!)",               emoji: '✨', winText: 'Yeeeeeeee!!!!!           duduuuuuuu!!!',     winSub: 'Happy birthday my love 💋💋💋🎂. Many many happy returns of the day bubbu', isLast: true },
     ];
 
     let qi = 0, noCount = 0;
@@ -325,5 +326,6 @@
     // Position No beside Yes after render
     setTimeout(resetNoBtn, 150);
   </script>
+  <script src="theme.js"></script>
 </body>
 </html>
